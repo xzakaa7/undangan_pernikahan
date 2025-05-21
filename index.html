@@ -36,9 +36,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 0.6s ease-in-out;
     }
 
     .image.show {
@@ -51,6 +51,17 @@
 
     #isi {
       z-index: 1;
+      background: url('wayang-pattern.png') repeat;
+      animation: bgMove 20s linear infinite;
+    }
+
+    @keyframes bgMove {
+      from {
+        background-position: 0 0;
+      }
+      to {
+        background-position: 100% 100%;
+      }
     }
 
     .button-open {
@@ -90,7 +101,7 @@
   <div class="image-wrapper">
     <img id="cover" class="image" src="cover.png" alt="Sampul Undangan" />
     <img id="isi" class="image" src="isi.png" alt="Isi Undangan" />
-    <button class="button-open" onclick="openInvitation()">Open Invitation</button>
+    <button class="button-open" onclick="openInvitation()">Undhangan ingkang kabuka</button>
   </div>
 
   <!-- Musik -->
@@ -101,24 +112,30 @@
 
   <script>
     window.addEventListener('load', () => {
-      document.getElementById('cover').classList.add('show');
+      setTimeout(() => {
+        document.getElementById('cover').classList.add('show');
+      }, 300); // tampilkan cover dengan sedikit delay singkat
 
-      // Untuk memastikan autoplay bekerja di beberapa browser, coba mainkan lewat JS
       const music = document.getElementById('bg-music');
       const playPromise = music.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Jika autoplay gagal (misalnya diblokir browser), musik akan diputar saat user klik tombol
-        });
+        playPromise.catch(() => {});
       }
     });
 
     function openInvitation() {
-      document.getElementById('cover').style.opacity = '0';
-      document.getElementById('isi').classList.add('show');
+      const cover = document.getElementById('cover');
+      const isi = document.getElementById('isi');
+
+      cover.style.opacity = '0';
+      isi.classList.add('show');
+
+      setTimeout(() => {
+        cover.style.display = 'none'; // agar tidak ganggu isi setelah fade
+      }, 700);
+
       document.querySelector('.button-open').style.display = 'none';
 
-      // Pastikan musik mulai diputar saat tombol diklik (fallback)
       const music = document.getElementById('bg-music');
       music.play();
     }
